@@ -19,7 +19,6 @@ class SignIn extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    console.log(event);
     this.setState({ email: "", password: "" });
   };
 
