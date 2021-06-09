@@ -40,4 +40,11 @@ const mapStateToProps = (state) => {
   };
 };
 
+// We can also destructuring the props as {user} below.
+// const mapStateToProps = ({user}) => {
+//   return {
+//     currentUser: user.currentUser,
+//   };
+// };
+
 export default connect(mapStateToProps)(Header);
