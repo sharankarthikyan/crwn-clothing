@@ -1,10 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
 
 import { auth } from "../../firebase/firebase.utils";
 import CartIcon from "../cart-icon/cart-icon.component";
 import CartDropdown from "../cart-dropdown/cart-dropdown.component";
+import { selectCartHidden } from "../../redux/cart/cart.selectors";
+import { selectCurrentUser } from "../../redux/user/user.selectors";
 
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 import "./header.styles.scss";
@@ -41,15 +44,26 @@ const Header = ({ currentUser, hidden }) => {
   );
 };
 
-const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => {
-  // This is advanced way of destructuring, give currentUser from user object and give hidden from cart object.
-  return {
-    currentUser,
-    hidden,
-  };
-};
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+  hidden: selectCartHidden,
+});
+
+// The below one is using selector.
+// const mapStateToProps = (state) => ({
+//   currentUser: selectCurrentUser(state),
+//   hidden: selectCartHidden(state),
+// });
 
 // We can get props and use it like below ways.
+// const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => {
+//   // This is advanced way of destructuring, give currentUser from user object and give hidden from cart object.
+//   return {
+//     currentUser,
+//     hidden,
+//   };
+// };
+
 // const mapStateToProps = (state) => {
 //   return {
 //     currentUser: state.user.currentUser,
