@@ -1,5 +1,6 @@
 // The main purpose of implementing selector is to make good performance.
 // We created this because, if we change some other state unrelated to cartItems. The cartItems state is also rerendering.
+// First of all, React rerenders on new state *OBJECT* as a props. If we call mapStateToProps without selector it gives component a new Object even the state is not changed. So, Component props always getting a new Object, then the component is always renders.
 
 import { createSelector } from "reselect";
 
