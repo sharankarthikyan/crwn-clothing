@@ -1,40 +1,41 @@
-import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
+import React from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
-import "./App.css";
+import './App.css';
 
-import HomePage from "./pages/homepage/homepage.component";
-import ShopPage from "./pages/shop/shop.component";
-import CheckoutPage from "./pages/checkout/checkout.component";
+import HomePage from './pages/homepage/homepage.component';
+import ShopPage from './pages/shop/shop.component';
+import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
+import CheckoutPage from './pages/checkout/checkout.component';
 
-import Header from "./components/header/header.component";
-import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
-import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
-import { setCurrentUser } from "./redux/user/user.actions";
-import { selectCurrentUser } from "./redux/user/user.selectors";
+import Header from './components/header/header.component';
+
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+
+import { setCurrentUser } from './redux/user/user.actions';
+import { selectCurrentUser } from './redux/user/user.selectors';
 
 class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
     const { setCurrentUser } = this.props;
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
-      // If you signout, userAuth value will be null.
+
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
 
-        userRef.onSnapshot((snapShot) => {
-          // onSnapshot mothod gives the actual data.
+        userRef.onSnapshot(snapShot => {
           setCurrentUser({
             id: snapShot.id,
-            ...snapShot.data(),
+            ...snapShot.data()
           });
         });
-      } else {
-        setCurrentUser(userAuth);
       }
+
+      setCurrentUser(userAuth);
     });
   }
 
@@ -47,15 +48,15 @@ class App extends React.Component {
       <div>
         <Header />
         <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route path="/shop" component={ShopPage} />
-          <Route exact path="/checkout" component={CheckoutPage} />
+          <Route exact path='/' component={HomePage} />
+          <Route path='/shop' component={ShopPage} />
+          <Route exact path='/checkout' component={CheckoutPage} />
           <Route
             exact
-            path="/signin"
+            path='/signin'
             render={() =>
               this.props.currentUser ? (
-                <Redirect to="/" />
+                <Redirect to='/' />
               ) : (
                 <SignInAndSignUpPage />
               )
@@ -68,41 +69,14 @@ class App extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser,
+  currentUser: selectCurrentUser
 });
 
-// This is also a another convention of writting selector without createStructuredSelector.
-// const mapStateToProps = (state) => ({
-//   currentUser: selectCurrentUser(state),
-// });
-
-// Below are general mapStateToProps in redux.
-// const mapStateToProps = ({ user }) => {
-//   return {
-//     currentUser: user.currentUser,
-//   };
-// };
-
-// The above and below mapStateToProps code are same.
-// const mapStateToProps = (state) => {
-//   return {
-//     currentUser: state.user.currentUser,
-//   };
-// };
-
-// The below are mapDispatchToProps
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
 });
 
-// The below code is same as above. Syntax only the difference.
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     setCurrentUser: (user) => {
-//       return dispatch(setCurrentUser(user));
-//     },
-//   };
-// };
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
-// First argument is null because, there is no mapStateToProps.
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
