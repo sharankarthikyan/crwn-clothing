@@ -20,23 +20,23 @@ export const ImageContainer = styled.div`
   }
 `;
 
-export const TextContainer = styled.span`
+export const BaseSpan = styled.span`
   width: 23%;
 `;
 
-export const QuantityContainer = styled(TextContainer)`
+export const Quantity = styled(BaseSpan)`
   display: flex;
-
-  span {
-    margin: 0 10px;
-  }
-
-  div {
-    cursor: pointer;
-  }
 `;
 
-export const RemoveButtonContainer = styled.div`
+export const Arrow = styled.div`
+  cursor: pointer;
+`;
+
+export const Value = styled.span`
+  margin: 0 10px;
+`;
+
+export const RemoveButton = styled.div`
   padding-left: 12px;
   cursor: pointer;
 `;
